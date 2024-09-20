@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Pokedex</h1>
+
+        <!-- Content container for Pokémon cards -->
+        <div id="detailContainer" class="flex-container">
+
+        </div>
+
+        <!-- Pagination controls -->
+        <div id="pagination" class="pagination">
+            <button id="prevBtn" onclick="prevPage()" disabled>Previous</button>
+            <a><span id="pageNumber">1</span> of 66</a>
+            <button id="nextBtn" onclick="nextPage()">Next</button>
+        </div>
+    </div>
+
+    <script >
+    // Ambil data Pokémon dari localStorage
+    const pokemonData = JSON.parse(localStorage.getItem('pokemonDetails'));
+
+    if (pokemonData) {      
+        const detailContainer = document.getElementById('detailContainer');
+        detailContainer.innerHTML = `
+            <div class="img">
+                <img src="${pokemonData.sprites.front_default}" alt="${pokemonData.name}">
+                <h2>${pokemonData.name}</h2>
+            </div>
+            <div class="type">
+                <ul id="type">
+                </ul>
+            </div>
+            <span class='detailNav'>
+                <h3>Tentang</h3>
+                <h3>Statistik</h3>
+            </span>
+            <div id="tentang">
+                <p>Height: ${pokemonData.height}</p>
+                <p>Weight: ${pokemonData.weight}</p>
+                <p>Abilities: ${pokemonData.abilities.map(ability => ability.ability.name).join(', ')}</p>
+            </div>
+            `;
+            const dataTypes = pokemonData.types;
+            dataTypes.forEach(element => {
+            const type = document.getElementById('type');
+            const span = document.createElement('span');
+            const lis = document.createElement('li');
+            lis.innerText = element.type.name;
+            span.classList.add('pokemon-type', element.type.name);
+            span.appendChild(lis);
+            type.appendChild(span);
+        });
+        } else {
+            console.error('Detail Pokémon tidak ditemukan di localStorage');
+        }
+    </script>
+</body>
+</html>
